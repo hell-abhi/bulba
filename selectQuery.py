@@ -1,27 +1,18 @@
 class Select:
 
-    def prepare_query(self):
-        pass
-
-    def execute_query(self):
-        pass
-
-    def get_result(self):
-        pass
-
     def __init__(self, connection=None, columns=None, tables=None):
 
         if not connection:
             raise ValueError("Specify a Connect object")
-        
+
         if not columns:
             raise ValueError("Specify column name(s)")
 
         if not tables:
             raise ValueError("Specify table name(s)")
-        
+
         self.cursor = connection.establish_connection()
-        
+
         self.columns = columns
         self.columns_size = len(columns)
 
@@ -37,9 +28,9 @@ class Select:
         if type(self.columns) is list:
             columns_iterator = 1
             for column in self.columns:
-                if columns_iterator<self.columns_size:
+                if columns_iterator < self.columns_size:
                     self.query_string += column+", "
-                elif columns_iterator==self.columns_size:
+                elif columns_iterator == self.columns_size:
                     self.query_string += column+" "
                 columns_iterator = columns_iterator+1
 
@@ -48,7 +39,6 @@ class Select:
 
         self.query_string += "FROM "
 
-        tables_iterator = 1
         for table in self.tables:
             self.query_string += table
 
@@ -59,11 +49,13 @@ class Select:
     def execute_query(self):
 
         self.cursor.execute(self.query_string)
-        columns = self.cursor.description 
-        self.result = [{columns[index][0]:column for index, column in enumerate(value)} for value in self.cursor.fetchall()]
+        columns = self.cursor.description
+        self.result = [
+            {columns[index][0]:column for index, column in enumerate(value)}
+            for value in self.cursor.fetchall()
+            ]
         return self.result
 
     def print_query_string(self):
 
         print(self.query_string)
-        
