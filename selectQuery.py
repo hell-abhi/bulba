@@ -23,28 +23,35 @@ class Select:
 
     def prepare_query(self):
 
-        self.query_string = "SELECT "
+        self.query_string = "  SELECT "
 
         if type(self.columns) is list:
             columns_iterator = 1
             for column in self.columns:
                 if columns_iterator < self.columns_size:
-                    self.query_string += column+", "
+                    self.query_string += "`"+column+"`"+", "
                 elif columns_iterator == self.columns_size:
-                    self.query_string += column+" "
+                    self.query_string += "`"+column+"`"+" "
                 columns_iterator = columns_iterator+1
 
         if type(self.columns) is str:
             self.query_string += self.columns+" "
 
-        self.query_string += "FROM "
+        self.query_string += " FROM "
 
         for table in self.tables:
-            self.query_string += table
+            self.query_string += "`"+table+"`"
+
+        return self
+
+    def condition(self):
+
+        self.query_string += " WHERE "
 
     def limit(self, limit_count):
 
         self.query_string += " LIMIT "+str(limit_count)
+        return self
 
     def execute_query(self):
 
