@@ -2,8 +2,10 @@ from connection import Connect
 from selectQuery import Select
 from comparisonOperators import __eq, __ne, __gt
 from logicalOperators import __and
+import os
 
-connection = Connect("localhost", "root", "abhi6355", "form")
+
+connection = Connect("localhost", "root", os.environ.get('MYSQL_PASSWORD'), "form")
 
 select_result = Select(
     connection=connection,
