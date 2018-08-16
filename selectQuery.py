@@ -44,9 +44,16 @@ class Select:
 
         return self
 
-    def condition(self):
+    def condition(self, condition_string):
 
         self.query_string += " WHERE "
+
+        if type(condition_string) is str:
+            self.query_string += condition_string
+        else:
+            raise TypeError("condition expects a string as a parameter")
+
+        return self
 
     def limit(self, limit_count):
 

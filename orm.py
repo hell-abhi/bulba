@@ -1,21 +1,21 @@
 from connection import Connect
 from selectQuery import Select
-from comparisonOperators import __eq, __ne, __gt
+from comparisonOperators import __eq, __lt
 from logicalOperators import __and
 import os
 
 
-connection = Connect("localhost", "root", os.environ.get('MYSQL_PASSWORD'), "form")
+connection = Connect(
+    "localhost",
+    "root",
+    os.environ.get('MYSQL_PASSWORD'),
+    "form"
+    )
 
 select_result = Select(
     connection=connection,
-    columns=["first_name", "last_name"],
+    columns=["user_id", "first_name", "last_name"],
     tables=["user_details"]
     )
-select_result.limit(10)
-ans = select_result.execute_query()
-select_result.print_query_string()
-print(ans)
-
-print(__and([__eq('A', 10), __ne('B', 20), __gt('C', 30)]))
-print(__and(__eq('A', 10), __gt('B', 10)))
+condition = __and(__lt('user_id', 6), __eq('first_name', 'David'))
+print(select_result.condition(condition).execute_query())
